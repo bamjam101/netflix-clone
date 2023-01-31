@@ -8,10 +8,23 @@ import {
   Route,
   RouterProvider,
 } from "react-router-dom";
+import Layout from "./components/Layout";
+import Login from "./pages/Login";
+import SignUp from "./pages/SignUp";
+import Browse from "./pages/Browse";
 
 function AppRouter() {
   const router = createBrowserRouter(
-    createRoutesFromElements(<Route path="/" element={<App />} />)
+    createRoutesFromElements(
+      <>
+        <Route path="/" element={<App />} />
+        <Route path="/login" element={<SignUp />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="browse" element={<Layout />}>
+          <Route index element={<Browse />} />
+        </Route>
+      </>
+    )
   );
   return <RouterProvider router={router}></RouterProvider>;
 }
