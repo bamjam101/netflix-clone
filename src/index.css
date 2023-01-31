@@ -10,3 +10,7 @@
     min-height: theme("height.screen");
     font-family: 'Poppins', consolas, sans-serif;
 }
+
+.scroll-hide::-webkit-scrollbar {
+    display: none;
+}

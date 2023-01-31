@@ -5,8 +5,8 @@ module.exports = {
     extend: {
       colors: {
         dark: "hsl(0deg 0% 8%)"
-      }
-    },
+      },
+    }
   },
-  plugins: [],
+  plugins: [require('@tailwindcss/line-clamp'), require('tailwind-scrollbar-hide')],
 }
