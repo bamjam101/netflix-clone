@@ -3,29 +3,28 @@ import { Dialog, Transition } from "@headlessui/react";
 
 type ModalProp = {
   isOpen: boolean;
-  handleClose: (value: boolean) => void;
+  onClose: (value: boolean) => void;
   title: string | React.ReactElement;
   children: React.ReactElement;
+  closeModal: () => void;
 };
 
 export default function Modal({
   isOpen,
-  handleClose,
+  onClose,
   title,
   children,
+  closeModal,
 }: ModalProp) {
-  const modalRef = useRef<HTMLSelectElement>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
+
   function handleMouseLeave(e: MouseEvent) {
-    handleClose(false);
+    closeModal();
   }
-  useEffect(() => {
-    if (modalRef.current) {
-      modalRef.current?.addEventListener("mouseleave", handleMouseLeave);
-    }
-  }, [modalRef.current]);
+
   return (
     <Transition appear show={isOpen} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={handleClose}>
+      <Dialog as="div" className="relative z-10" onClose={onClose}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -34,12 +33,21 @@ export default function Modal({
           leave="ease-in duration-200"
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
+          afterEnter={() => {
+            modalRef.current?.addEventListener("mouseleave", handleMouseLeave);
+          }}
+          afterLeave={() => {
+            modalRef.current?.removeEventListener(
+              "mouseleave",
+              handleMouseLeave
+            );
+          }}
         >
           <div className="fixed inset-0 bg-black bg-opacity-25" />
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-y-auto">
-          <div className="flex min-h-full items-center justify-center p-4 text-center">
+          <div className="flex min-h-full items-center justify-center text-center">
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-300"
@@ -49,17 +57,11 @@ export default function Modal({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-black p-6 text-left align-middle shadow-xl transition-all">
-                <article
-                  className="flex h-[100%] w-[100%] flex-col"
-                  ref={modalRef}
-                >
-                  <Dialog.Title
-                    as="h3"
-                    className="text-lg font-medium leading-6 text-white"
-                  >
-                    {title}
-                  </Dialog.Title>
+              <Dialog.Panel
+                ref={modalRef}
+                className="w-full max-w-md transform overflow-hidden rounded-2xl bg-black text-left align-middle shadow-xl transition-all"
+              >
+                <article className="flex w-full flex-col items-center justify-center">
                   {children}
                 </article>
               </Dialog.Panel>
