@@ -12,6 +12,7 @@ import {
   PlayArrow,
   PlayArrowRounded,
 } from "@mui/icons-material";
+import { Position } from "../common/types";
 
 type MovieCardProp = {
   poster_path: string;
@@ -43,7 +44,7 @@ export type MovieVideoInfo = {
   [k: string]: unknown;
 };
 
-const MovieCard = ({
+export default function MovieCard({
   poster_path,
   id,
   title,
@@ -51,9 +52,11 @@ const MovieCard = ({
   release_date,
   popularity,
   vote_average,
-}: MovieCardProp) => {
+}: MovieCardProp) {
   const movieCardRef = useRef<HTMLSelectElement>(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [hidePoster, setHidePoster] = useState(false);
+  const [position, setPosition] = useState<Position | null>(null);
   const [videoInfo, setVideoInfo] = useState<MovieVideoInfo | null>(null);
 
   function onClose(value: boolean) {
@@ -71,8 +74,27 @@ const MovieCard = ({
 
   async function handleMouseOver(e: MouseEvent) {
     const [videoInfo] = await fetchVideoInfo();
-    setVideoInfo(videoInfo);
-    setIsOpen(true);
+    const key = movieCardRef.current;
+    let calculatedPosition = movieCardRef.current?.getBoundingClientRect();
+    let top = (calculatedPosition?.top ?? 0) - 100;
+    let left = (calculatedPosition?.left ?? 0) - 100;
+    if (left < 0) {
+      left = (calculatedPosition?.left as number) + 10;
+    }
+    let totalWidth = left + 450;
+    if (totalWidth > document.body.clientWidth) {
+      left = left - (totalWidth - document.body.clientWidth);
+    }
+    // setTimeout(() => {
+    if (movieCardRef.current === key) {
+      console.log(movieCardRef.current, key);
+      setIsOpen(true);
+      setVideoInfo(videoInfo);
+      setPosition({ top, left });
+    } else {
+      // movieCardRef.current?.removeEventListener("mouseover", handleMouseOver);
+    }
+    // }, 3000);
   }
 
   function closeModal() {
@@ -85,6 +107,17 @@ const MovieCard = ({
       movieCardRef.current?.removeEventListener("mouseover", handleMouseOver);
     };
   }, []);
+
+  useEffect(() => {
+    if (videoInfo?.key) {
+      setTimeout(() => {
+        setHidePoster(true);
+      }, 800);
+    }
+    if (!isOpen) {
+      setHidePoster(false);
+    }
+  }, [videoInfo, isOpen]);
   return (
     <>
       <article
@@ -122,12 +155,21 @@ const MovieCard = ({
         key={id}
         onClose={onClose}
         closeModal={closeModal}
+        position={position}
       >
         <article>
-          <section>
+          <section className="relative">
+            <img
+              src={createPosterUrl(poster_path)}
+              alt={title}
+              className={`absolute top-0 left-0 w-full ${
+                hidePoster ? "invisible -z-0 h-0" : "z-1 visible h-full"
+              }`}
+            />
+            )
             <YouTube
               opts={{
-                width: "450",
+                width: "400",
                 playerVars: {
                   autoplay: 1,
                   playsInline: 1,
@@ -135,10 +177,11 @@ const MovieCard = ({
                 },
               }}
               videoId={videoInfo?.key}
+              className={!hidePoster ? "invisible" : "visible"}
             />
           </section>
-          <section className="flex w-full items-center justify-center py-6">
-            <ul className="flex h-full w-full scale-150 items-center justify-center gap-6">
+          <section className="flex w-full items-center justify-between py-6">
+            <ul className="flex h-full items-center justify-evenly gap-6">
               <li className="h-12 w-12">
                 <button className="h-full w-full">
                   <PlayArrow className="text-white" />
@@ -154,6 +197,8 @@ const MovieCard = ({
                   <Add className="text-white" />
                 </button>
               </li>
+            </ul>
+            <ul className="flex h-full items-center justify-evenly">
               <li className="h-12 w-12">
                 <button className="h-full w-full">
                   <ExpandMore className="text-white" />
@@ -165,6 +210,4 @@ const MovieCard = ({
       </Modal>
     </>
   );
-};
-
-export default MovieCard;
+}
