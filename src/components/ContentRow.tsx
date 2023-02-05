@@ -108,7 +108,11 @@ const ContentRow = ({ title, endpoint }: RowProp) => {
           className=" flex h-[45vh] gap-2 text-sm transition-transform duration-500 ease-in-out"
         >
           {rowData?.map((row) => (
-            <MovieCard {...row} key={row.id} />
+            <MovieCard
+              uid={`${row.id}-${title}`}
+              key={`${row.id}-${title}`}
+              {...row}
+            />
           ))}
         </section>
       </section>

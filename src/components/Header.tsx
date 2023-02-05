@@ -1,12 +1,32 @@
+import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import NetflixLogo from "../assets/Netflix_Logo_RGB.png";
 
 const Header = () => {
+  const [fixed, setFixed] = useState(false);
+
   function isActiveLink({ isActive }: { isActive: boolean }) {
     return isActive ? "font-semibold text-white" : undefined;
   }
+
+  function onWindowScroll() {
+    if (window.scrollY > 0) {
+      setFixed(true);
+    } else {
+      setFixed(false);
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener("scroll", onWindowScroll);
+    () => window.removeEventListener("scroll", onWindowScroll);
+  });
   return (
-    <header className="sticky grid h-[8vh] w-full grid-cols-[200px_auto_200px] gap-4 px-4 text-sm">
+    <header
+      className={`${
+        fixed ? "fixed bg-dark" : "relative bg-transparent"
+      } z-10 grid h-[8vh] w-full grid-cols-[200px_auto_200px] gap-4  px-4 text-sm transition-colors duration-200 ease-linear`}
+    >
       <Link
         to={"/browse"}
         className="flex h-full w-full items-center justify-center"

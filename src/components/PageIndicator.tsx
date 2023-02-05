@@ -9,7 +9,7 @@ const PageIndicator = ({
   currentPage: number;
   className: string;
 }) => {
-  return (
+  return isFinite(pagesCount) ? (
     <ul
       className={`mr-2 flex items-center justify-end gap-2 pb-4 ${className}`}
     >
@@ -24,7 +24,7 @@ const PageIndicator = ({
           ></li>
         ))}
     </ul>
-  );
+  ) : null;
 };
 
 export default PageIndicator;

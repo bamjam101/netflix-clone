@@ -2,17 +2,9 @@ import React, { useEffect, useRef, useState } from "react";
 import { createPosterUrl } from "../utils";
 import Modal from "./Modal";
 import YouTube from "react-youtube";
-import { fetchRequest } from "../common/api";
-import { ENDPOINT } from "../common/endpoint";
-import {
-  Add,
-  ExpandMore,
-  ExpandMoreRounded,
-  FavoriteBorderRounded,
-  PlayArrow,
-  PlayArrowRounded,
-} from "@mui/icons-material";
+import { fetchVideoInfo, MovieVideoInfo } from "../common/api";
 import { Position } from "../common/types";
+import MovieCardActions from "./MovieCardActions";
 
 type MovieCardProp = {
   poster_path: string;
@@ -22,26 +14,7 @@ type MovieCardProp = {
   release_date: string;
   popularity: number;
   vote_average: number;
-};
-
-export type MovieVideoResult<T> = {
-  id: number;
-  results: T;
-  [k: string]: unknown;
-};
-
-export type MovieVideoInfo = {
-  iso_639_1: string;
-  iso_3166_1: string;
-  name: string;
-  key: string;
-  site: string;
-  size: number;
-  type: string;
-  official: boolean;
-  published_at: string;
-  id: string;
-  [k: string]: unknown;
+  uid: string;
 };
 
 export default function MovieCard({
@@ -52,6 +25,7 @@ export default function MovieCard({
   release_date,
   popularity,
   vote_average,
+  uid,
 }: MovieCardProp) {
   const movieCardRef = useRef<HTMLSelectElement>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -63,17 +37,8 @@ export default function MovieCard({
     setIsOpen(value);
   }
 
-  async function fetchVideoInfo() {
-    const response = await fetchRequest<MovieVideoResult<MovieVideoInfo[]>>(
-      ENDPOINT.MovieVideo.replace("{movie_id}", id.toString())
-    );
-    return response.results.filter(
-      (result) => result.site.toLowerCase() === "youtube"
-    );
-  }
-
   async function handleMouseOver(e: MouseEvent) {
-    const [videoInfo] = await fetchVideoInfo();
+    const [videoInfo] = await fetchVideoInfo(id.toString());
     const key = movieCardRef.current;
     let calculatedPosition = movieCardRef.current?.getBoundingClientRect();
     let top = (calculatedPosition?.top ?? 0) - 100;
@@ -85,16 +50,9 @@ export default function MovieCard({
     if (totalWidth > document.body.clientWidth) {
       left = left - (totalWidth - document.body.clientWidth);
     }
-    // setTimeout(() => {
-    if (movieCardRef.current === key) {
-      console.log(movieCardRef.current, key);
-      setIsOpen(true);
-      setVideoInfo(videoInfo);
-      setPosition({ top, left });
-    } else {
-      // movieCardRef.current?.removeEventListener("mouseover", handleMouseOver);
-    }
-    // }, 3000);
+    setIsOpen(true);
+    setVideoInfo(videoInfo);
+    setPosition({ top, left });
   }
 
   function closeModal() {
@@ -112,7 +70,7 @@ export default function MovieCard({
     if (videoInfo?.key) {
       setTimeout(() => {
         setHidePoster(true);
-      }, 800);
+      }, 1000);
     }
     if (!isOpen) {
       setHidePoster(false);
@@ -122,15 +80,15 @@ export default function MovieCard({
     <>
       <article
         ref={movieCardRef}
-        key={id}
+        key={uid}
         className="group/card grid grid-rows-[70%_30%]"
       >
         <section className="h-[250px] w-[200px]">
           <img
             loading="lazy"
-            src={createPosterUrl(poster_path)}
+            src={createPosterUrl(poster_path, 200)}
             alt={title}
-            className="h-full w-full object-contain transition-transform  duration-200 group-hover/card:scale-110"
+            className="h-full w-full object-contain transition-transform duration-200 group-hover/card:scale-110"
           />
         </section>
         <section className="flex flex-col px-2">
@@ -152,7 +110,7 @@ export default function MovieCard({
       <Modal
         title={title}
         isOpen={isOpen}
-        key={id}
+        key={movieCardRef.current?.id}
         onClose={onClose}
         closeModal={closeModal}
         position={position}
@@ -160,16 +118,17 @@ export default function MovieCard({
         <article>
           <section className="relative">
             <img
-              src={createPosterUrl(poster_path)}
+              src={createPosterUrl(poster_path, 400)}
               alt={title}
-              className={`absolute top-0 left-0 w-full ${
-                hidePoster ? "invisible -z-0 h-0" : "z-1 visible h-full"
+              className={`object-contain ${
+                hidePoster ? "invisible h-0" : " visible h-full"
               }`}
             />
             )
             <YouTube
               opts={{
                 width: "400",
+                height: "400",
                 playerVars: {
                   autoplay: 1,
                   playsInline: 1,
@@ -180,32 +139,7 @@ export default function MovieCard({
               className={!hidePoster ? "invisible" : "visible"}
             />
           </section>
-          <section className="flex w-full items-center justify-between py-6">
-            <ul className="flex h-full items-center justify-evenly gap-6">
-              <li className="h-12 w-12">
-                <button className="h-full w-full">
-                  <PlayArrow className="text-white" />
-                </button>
-              </li>
-              <li className="h-12 w-12">
-                <button className="h-full w-full">
-                  <FavoriteBorderRounded className="text-white" />
-                </button>
-              </li>
-              <li className="h-12 w-12">
-                <button className="h-full w-full">
-                  <Add className="text-white" />
-                </button>
-              </li>
-            </ul>
-            <ul className="flex h-full items-center justify-evenly">
-              <li className="h-12 w-12">
-                <button className="h-full w-full">
-                  <ExpandMore className="text-white" />
-                </button>
-              </li>
-            </ul>
-          </section>
+          <MovieCardActions />
         </article>
       </Modal>
     </>

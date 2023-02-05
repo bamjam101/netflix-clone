@@ -1,6 +1,5 @@
-import React from "react";
 import { ENDPOINT } from "../common/endpoint";
-import ContentRow from "../components/ContentRow";
+import ContentRow from "./ContentRow";
 
 const ContentList = () => {
   return (
