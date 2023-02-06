@@ -1,3 +1,4 @@
+import { InfoOutlined, PlayArrow } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import YouTube, { YouTubeEvent, YouTubeProps } from "react-youtube";
 import {
@@ -14,11 +15,12 @@ export default function Banner() {
   const [randomMovie, setRandomMovie] = useState<MovieResult | null>(null);
   const [videoInfo, setVideoInfo] = useState<MovieVideoInfo | null>(null);
   const [hidePoster, setHidePoster] = useState(false);
+  const [backdropVisible, setBackdropVisible] = useState(true);
   const options: YouTubeProps["opts"] = {
     width: document.body.clientWidth,
     height: "800",
     playerVars: {
-      autoplay: 1,
+      autoplay: true,
       playsInline: 1,
       controls: 0,
     },
@@ -31,8 +33,10 @@ export default function Banner() {
   function onStateChange(event: YouTubeEvent<number>) {
     if (event.data === 0) {
       setHidePoster(false);
+      setBackdropVisible(true);
     } else if (event.data === 1) {
       setHidePoster(true);
+      setBackdropVisible(false);
     }
   }
 
@@ -57,7 +61,7 @@ export default function Banner() {
     fetcPopularMovies();
   }, []);
   return randomMovie ? (
-    <section className="relative aspect-video h-[800px] w-full">
+    <article className="relative aspect-video h-[800px] w-full">
       <img
         src={createPosterUrl(randomMovie?.backdrop_path ?? "", 0, "original")}
         alt={randomMovie?.title}
@@ -74,6 +78,23 @@ export default function Banner() {
           onStateChange={onStateChange}
         />
       ) : null}
-    </section>
+      {backdropVisible ? (
+        <section className="absolute top-0 left-0 z-[1] h-full w-full bg-dark/60"></section>
+      ) : null}
+      <section className="absolute bottom-24 z-[1] ml-16 flex max-w-sm flex-col gap-2">
+        <h2 className="text-4xl line-clamp-2">{randomMovie.title}</h2>
+        <p className="text-sm line-clamp-3">{randomMovie.overview}</p>
+        <div className="flex gap-2">
+          <button className="w-[100px] rounded-md bg-white p-2 text-center text-dark">
+            <PlayArrow />
+            Play
+          </button>
+          <button className="w-auto rounded-md bg-zinc-400 p-2 text-center text-white">
+            <InfoOutlined />
+            More Info
+          </button>
+        </div>
+      </section>
+    </article>
   ) : null;
 }
