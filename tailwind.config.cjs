@@ -8,7 +8,7 @@ module.exports = {
       },
       animation: {
         "slide-rtl": "slide-rtl .5s ease-in-out",
-        "slide-ltr": "slide-ltr 1s ease-in-out",
+        "slide-ltr": "slide-ltr .6s ease-in-out",
       },
 
       keyframes: {
@@ -18,8 +18,8 @@ module.exports = {
         },
         "slide-ltr": {
           from: { "margin-right": "90%" },
-          to: { "margin-right": "-90%" }
-        }
+          to: { "margin-right": "0%" }
+        },
       }
     }
   },

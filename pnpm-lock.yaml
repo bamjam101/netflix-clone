@@ -12,6 +12,7 @@ specifiers:
   '@types/react-dom': ^18.0.9
   '@vitejs/plugin-react': ^3.0.0
   autoprefixer: ^10.4.13
+  heroicons: ^2.0.14
   postcss: ^8.4.21
   prettier: ^2.8.3
   prettier-plugin-tailwindcss: ^0.2.2
@@ -32,6 +33,7 @@ dependencies:
   '@mui/icons-material': 5.11.0_m3y2ykptchyoygtoroit6l3ehq
   '@mui/material': 5.11.7_rqh7qj4464ntrqrt6banhaqg4q
   '@tailwindcss/line-clamp': 0.4.2_tailwindcss@3.2.4
+  heroicons: 2.0.14
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
   react-router-dom: 6.8.0_biqbaboplfbrettd7655fr4n2y
@@ -1375,6 +1377,10 @@ packages:
     engines: {node: '>= 0.4.0'}
     dependencies:
       function-bind: 1.1.1
+
+  /heroicons/2.0.14:
+    resolution: {integrity: sha512-c0783w9OG/5SDsR5+cbTys5XnYEjPeqCs3w76HekZAA4VWjzLBq5nniGaZIcL6OqN42gseDiXAsd5ugNcKX+IQ==}
+    dev: false
 
   /hoist-non-react-statics/3.3.2:
     resolution: {integrity: sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw==}

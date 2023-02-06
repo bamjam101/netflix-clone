@@ -2,6 +2,7 @@ import { Notifications, Person, Search } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import NetflixLogo from "../assets/Netflix_Logo_RGB.png";
+import ProfileMenu from "./ProfileMenu";
 import Searchbar from "./Searchbar";
 
 const Header = () => {
@@ -27,7 +28,7 @@ const Header = () => {
     <header
       className={`${
         fixed ? "fixed bg-dark" : "relative bg-transparent"
-      } z-10 grid h-[8vh] w-full grid-cols-[200px_auto_400px] gap-4 px-4 text-sm transition-colors duration-200 ease-linear`}
+      } z-10 grid h-[8vh] w-full gap-4 px-4 text-sm transition-colors duration-200 ease-linear sm:grid-cols-[150px_1fr_auto] md:grid-cols-[200px_auto_400px]`}
     >
       <Link
         to={"/browse"}
@@ -35,7 +36,7 @@ const Header = () => {
       >
         <img className="object-contain" src={NetflixLogo} alt="Netflix Logo" />
       </Link>
-      <nav className="grid h-full place-items-start items-center">
+      <nav className="hidden h-full place-items-start items-center md:grid">
         <ul className="flex items-center justify-center gap-4 text-gray-300">
           <li>
             <NavLink to="/browse" className={isActiveLink}>
@@ -59,10 +60,10 @@ const Header = () => {
           </li>
         </ul>
       </nav>
-      <section className="flex items-center justify-between">
+      <section className="flex items-center justify-evenly gap-0 md:gap-4">
         <Searchbar />
         <Notifications />
-        <Person />
+        <ProfileMenu />
       </section>
     </header>
   );

@@ -29,11 +29,18 @@ const Searchbar = () => {
     if (isOpen) {
       window.addEventListener("click", onWindowClick);
     }
-    () => window.addEventListener("click", onWindowClick);
+    return () => window.addEventListener("click", onWindowClick);
   }, [isOpen]);
   return (
     <section className="flex w-[300px] items-center justify-end overflow-hidden">
-      <button className={`${isOpen ? "w-0" : "w-8"}`} onClick={toggleSearch}>
+      <button
+        className={`${
+          isOpen
+            ? "w-0 opacity-0"
+            : "opacity-1 w-8 transition-all duration-1000"
+        } `}
+        onClick={toggleSearch}
+      >
         {!isOpen ? (
           <Search style={{ fontSize: "1.8rem" }} />
         ) : (
