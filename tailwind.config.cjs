@@ -4,13 +4,13 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        dark: "hsl(0deg 0% 8%)"
+        dark: "hsl(0deg 0% 8%)",
+        netflixred: "#e50a14"
       },
       animation: {
         "slide-rtl": "slide-rtl .5s ease-in-out",
-        "slide-ltr": "slide-ltr .6s ease-in-out",
+        "slide-ltr": "slide-ltr .6s ease-in-out"
       },
-
       keyframes: {
         "slide-rtl": {
           from: { "margin-right": "-90%" },
@@ -19,7 +19,7 @@ module.exports = {
         "slide-ltr": {
           from: { "margin-right": "90%" },
           to: { "margin-right": "0%" }
-        },
+        }
       }
     }
   },
