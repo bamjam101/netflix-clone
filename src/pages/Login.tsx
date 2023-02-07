@@ -15,8 +15,8 @@ const Login = () => {
       password: HTMLInputElement;
     };
     const user = await signIn(email.value, password.value);
-
     console.log(user);
+    navigate("/");
   };
   return (
     <>

@@ -116,12 +116,12 @@ export default function MovieCard({
         position={position}
       >
         <article>
-          <section className="relative">
+          <section className="grid h-full w-full place-items-center overflow-hidden">
             <img
               src={createPosterUrl(poster_path, 400)}
               alt={title}
               className={`object-contain ${
-                hidePoster ? "invisible h-0" : " visible h-full"
+                hidePoster ? "invisible h-0" : " visible h-[400px]"
               }`}
             />
             )
@@ -136,7 +136,7 @@ export default function MovieCard({
                 },
               }}
               videoId={videoInfo?.key}
-              className={!hidePoster ? "invisible" : "visible"}
+              className={!hidePoster ? "invisible h-0" : "visible h-auto"}
             />
           </section>
           <MovieCardActions />

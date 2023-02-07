@@ -1,4 +1,4 @@
-import { ChevronLeft, Close, ExpandMore } from "@mui/icons-material";
+import { ExpandMore } from "@mui/icons-material";
 import { MouseEvent, useEffect, useRef, useState } from "react";
 
 const ProfileMenu = () => {
@@ -32,14 +32,16 @@ const ProfileMenu = () => {
             alt="user-profile"
             className="h-8 w-8 rounded-lg object-contain"
           />
-          <ChevronLeft
-            className={`h-8 w-8 transition-transform duration-500 ${
-              showProfileMenu ? "rotate-90" : "-rotate-90"
-            }`}
+          <ExpandMore
+            sx={{
+              height: "2rem",
+              width: "2rem",
+              transition: "transform 0.45s",
+            }}
           />
         </button>
         {showProfileMenu ? (
-          <ul className="absolute flex w-[150px] list-none flex-col justify-center gap-4 rounded-md bg-dark/80 px-4 py-2 sm:-left-[64px] sm:top-[36px] md:-left-[32px] md:top-[60px]">
+          <ul className="absolute -left-[64px] flex  w-[140px] list-none flex-col justify-center gap-4 rounded-md bg-dark/80 px-4 py-2 sm:-left-[74px] sm:top-[36px] md:-left-[84px] md:top-[60px] lg:-left-[94px] lg:w-[150px]">
             <li>Username</li>
             <li>Manage Profile</li>
             <li>Account</li>

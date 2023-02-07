@@ -11,24 +11,26 @@ const MovieCardActions = () => {
       <ul className="flex h-full items-center justify-evenly gap-6">
         <li className="h-12 w-12">
           <button className="h-full w-full">
-            <PlayArrow className="text-white" />
+            <PlayArrow sx={{ color: "white", fontSize: "2rem" }} />
           </button>
         </li>
         <li className="h-12 w-12">
           <button className="h-full w-full">
-            <FavoriteBorderRounded className="text-white" />
+            <FavoriteBorderRounded
+              sx={{ color: "white", fontSize: "1.5rem" }}
+            />
           </button>
         </li>
         <li className="h-12 w-12">
           <button className="h-full w-full">
-            <Add className="text-white" />
+            <Add sx={{ color: "white", fontSize: "1.5rem" }} />
           </button>
         </li>
       </ul>
       <ul className="flex h-full items-center justify-evenly">
         <li className="h-12 w-12">
           <button className="h-full w-full">
-            <ExpandMore className="text-white" />
+            <ExpandMore sx={{ color: "white", fontSize: "2rem" }} />
           </button>
         </li>
       </ul>

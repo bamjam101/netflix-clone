@@ -5,10 +5,10 @@ import { Position } from "../common/types";
 type ModalProp = {
   isOpen: boolean;
   onClose: (value: boolean) => void;
-  title: string | React.ReactElement;
+  title?: string | React.ReactElement;
   children: React.ReactElement;
-  closeModal: () => void;
-  position: Position | null;
+  closeModal?: () => void;
+  position?: Position | null;
 };
 
 export default function Modal({
@@ -22,7 +22,9 @@ export default function Modal({
   const modalRef = useRef<HTMLDivElement>(null);
 
   function handleMouseLeave(e: MouseEvent) {
-    closeModal();
+    if (closeModal) {
+      closeModal();
+    }
   }
 
   return (
@@ -62,7 +64,7 @@ export default function Modal({
             >
               <Dialog.Panel
                 ref={modalRef}
-                className="w-full max-w-[400px] transform overflow-hidden rounded-2xl bg-black text-left align-middle shadow-xl transition-all"
+                className="w-auto transform overflow-hidden rounded-2xl bg-black text-left align-middle shadow-xl transition-all"
                 style={
                   position ? { position: "fixed", ...position } : undefined
                 }

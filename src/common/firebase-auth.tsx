@@ -24,8 +24,6 @@ const app = initializeApp(firebaseConfig);
 
 const auth = getAuth(app);
 
-export type AuthContextType = ReturnType<typeof useProvideAuth>;
-
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({
@@ -37,38 +35,92 @@ export const AuthProvider = ({
   return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
 };
 
+export type AuthContextType = ReturnType<typeof useProvideAuth>;
+
+export const useAuth = () => useContext(AuthContext) ?? ({} as AuthContextType);
+
 function useProvideAuth() {
   const [user, setUser] = useState<User | null>(null);
+
+  const signUp = (email: string, password: string) =>
+    createUserWithEmailAndPassword(auth, email, password).then(({ user }) => {
+      setUser(user);
+      return user;
+    });
+
+  const signIn = (email: string, password: string) =>
+    signInWithEmailAndPassword(auth, email, password).then(({ user }) =>
+      setUser(user)
+    );
+
+  const signOutUser = () => signOut(auth).then(() => setUser(null));
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       user ? setUser(user) : setUser(null);
     });
+
     return () => unsubscribe();
-  }, []);
-
-  const signUp = (email: string, password: string) => {
-    createUserWithEmailAndPassword(auth, email, password).then(({ user }) => {
-      setUser(user);
-      return user;
-    });
-  };
-
-  const signIn = (email: string, password: string) => {
-    signInWithEmailAndPassword(auth, email, password).then(({ user }) => {
-      setUser(user);
-      return user;
-    });
-  };
-
-  const signOutUser = signOut(auth).then(() => setUser(null));
+  });
 
   return {
-    signUp,
     signIn,
-    signOut: signOutUser,
+    signUp,
+    signOutUser,
     user,
   };
 }
 
-export const useAuth = () => useContext(AuthContext) ?? ({} as AuthContextType);
+// Initialize Firebase
+// const app = initializeApp(firebaseConfig);
+
+// const auth = getAuth(app);
+
+// export type AuthContextType = ReturnType<typeof useProvideAuth>;
+
+// const AuthContext = createContext<AuthContextType | null>(null);
+
+// export const AuthProvider = ({
+//   children,
+// }: {
+//   children: React.ReactElement | React.ReactElement[];
+// }) => {
+//   const auth = useProvideAuth();
+//   return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
+// };
+
+// function useProvideAuth() {
+//   const [user, setUser] = useState<User | null>(null);
+
+//   useEffect(() => {
+//     const unsubscribe = onAuthStateChanged(auth, (user) => {
+//       user ? setUser(user) : setUser(null);
+//     });
+//     return () => unsubscribe();
+//   });
+
+//   const signUp = (email: string, password: string) => {
+//     createUserWithEmailAndPassword(auth, email, password).then(({ user }) => {
+//       setUser(user);
+//       return user;
+//     });
+//   };
+
+//   const signIn = (email: string, password: string) => {
+//     signInWithEmailAndPassword(auth, email, password).then(({ user }) => {
+//       setUser(user);
+//       return user;
+//     });
+//   };
+
+//   const signOutUser = signOut(auth).then(() => setUser(null));
+
+//   return {
+//     signUp,
+//     signIn,
+//     signOut: signOutUser,
+//     user,
+//   };
+// }
+
+// export const useAuth = () => useContext(AuthContext) ?? ({} as AuthContextType);

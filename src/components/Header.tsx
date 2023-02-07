@@ -28,7 +28,7 @@ const Header = () => {
     <header
       className={`${
         fixed ? "fixed bg-dark" : "relative bg-transparent"
-      } z-10 grid h-[8vh] w-full gap-4 px-4 text-sm transition-colors duration-200 ease-linear sm:grid-cols-[150px_1fr_auto] md:grid-cols-[200px_auto_400px]`}
+      } z-10 grid h-[8vh] w-full grid-cols-[30%_0_50%] gap-4 text-sm transition-colors duration-200 ease-linear md:grid-cols-[25%_25%_40%] lg:grid-cols-[10%_50%_auto]`}
     >
       <Link
         to={"/browse"}
@@ -36,7 +36,7 @@ const Header = () => {
       >
         <img className="object-contain" src={NetflixLogo} alt="Netflix Logo" />
       </Link>
-      <nav className="hidden h-full place-items-start items-center md:grid">
+      <nav className="invisible grid h-full place-items-start items-center lg:visible">
         <ul className="flex items-center justify-center gap-4 text-gray-300">
           <li>
             <NavLink to="/browse" className={isActiveLink}>
@@ -60,7 +60,7 @@ const Header = () => {
           </li>
         </ul>
       </nav>
-      <section className="flex items-center justify-evenly gap-0 md:gap-4">
+      <section className="flex items-center justify-evenly gap-2 lg:gap-4">
         <Searchbar />
         <Notifications />
         <ProfileMenu />
