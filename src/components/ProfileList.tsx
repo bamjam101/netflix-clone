@@ -1,6 +1,12 @@
 import { Add, Edit } from "@mui/icons-material";
 import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+import {
+  useDispatchContext,
+  useProfileContext,
+} from "../common/ProfileContext";
+import { ActionType, UserProfile } from "../common/types";
+import AddProfileCard from "./AddProfileCard";
 import Modal from "./Modal";
 import ProfileImg from "/Netflix-avatar.png";
 
@@ -27,21 +33,34 @@ function ProfileButton({
 function ProfileCard({
   edit,
   onEditClick,
+  profile,
+  onProfileClick,
 }: {
   edit: boolean;
-  onEditClick: () => void;
+  onEditClick: (profile: UserProfile) => void;
+  profile: UserProfile;
+  onProfileClick: (profile: UserProfile) => void;
 }) {
+  const { id, imageUrl, name } = profile;
+  function editClick(event: React.SyntheticEvent) {
+    event.stopPropagation();
+    onEditClick(profile);
+  }
   return (
-    <section className="group flex flex-col items-center justify-center gap-2 opacity-60 transition-opacity duration-200 hover:opacity-100">
+    <section
+      id={id}
+      className="group flex flex-col items-center justify-center gap-2 opacity-60 transition-opacity duration-200 hover:opacity-100"
+      onClick={() => onProfileClick(profile)}
+    >
       <div className="relative">
         <img
-          src={ProfileImg}
-          alt="profile-image"
+          src={imageUrl}
+          alt={name}
           className="h-[15vw] w-[15vw] rounded-md"
         />
         {edit ? (
           <button
-            onClick={onEditClick}
+            onClick={editClick}
             className="absolute inset-0 grid place-items-center bg-black/60 hover:bg-black/30"
           >
             <Edit
@@ -53,7 +72,7 @@ function ProfileCard({
         ) : null}
       </div>
       <h2 className="md:text-md text-sm transition-all duration-200 group-hover:font-semibold lg:text-lg">
-        Profile Name
+        {edit}
       </h2>
     </section>
   );
@@ -99,6 +118,9 @@ function EditProfile(props: {
 }
 
 const ProfileList = ({ edit }: { edit: boolean }) => {
+  const userProfile = useProfileContext();
+  const dispatch = useDispatchContext() as React.Dispatch<ActionType>;
+  const [profile, setProfile] = useState<UserProfile>();
   const navigate = useNavigate();
   const [isProfileEditorOpen, setIsProfileEditorOpen] = useState(false);
   function manageProfile() {
@@ -112,6 +134,11 @@ const ProfileList = ({ edit }: { edit: boolean }) => {
   function closeEditor() {
     setIsProfileEditorOpen(false);
   }
+
+  function onProfileClick(profile: UserProfile) {
+    dispatch({ type: "current", payload: profile });
+    navigate("/browse");
+  }
   const heading = !edit ? "Who's watching?" : "Manage Profiles";
   return (
     <article className="flex flex-col items-center justify-center gap-4">
@@ -119,16 +146,16 @@ const ProfileList = ({ edit }: { edit: boolean }) => {
         <h1 className="text-4xl">{heading}</h1>
       </header>
       <section className="flex items-center justify-center gap-2">
-        <ProfileCard onEditClick={openEditor} edit={edit} />
-        <ProfileCard onEditClick={openEditor} edit={edit} />
-        <ProfileCard onEditClick={openEditor} edit={edit} />
-        {edit ? (
-          <button className="ml-6 flex h-[5vw] w-[5vw] -translate-y-3 items-center justify-center rounded-full border border-gray-400 bg-gray-400 opacity-60 transition-opacity duration-200 hover:border-2 hover:border-white hover:bg-white hover:opacity-100">
-            <Add
-              sx={{ fontSize: "2rem", color: "black", fontWeight: "bolder" }}
-            />
-          </button>
-        ) : null}
+        {userProfile?.profiles?.map((profile) => {
+          <ProfileCard
+            key={profile.id}
+            profile={profile as UserProfile}
+            onEditClick={openEditor}
+            edit={edit}
+            onProfileClick={onProfileClick}
+          />;
+        })}
+        <AddProfileCard edit={edit} />
       </section>
       {edit ? (
         <>

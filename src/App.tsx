@@ -8,6 +8,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import { AuthProvider, useAuth } from "./common/firebase-auth";
+import ProfilesProvider from "./common/ProfileContext";
 import Layout from "./components/Layout";
 import Browse from "./pages/Browse";
 import Login from "./pages/Login";
@@ -54,7 +55,9 @@ function AppRouter() {
 function App() {
   return (
     <AuthProvider>
-      <AppRouter />
+      <ProfilesProvider>
+        <AppRouter />
+      </ProfilesProvider>
     </AuthProvider>
   );
 }

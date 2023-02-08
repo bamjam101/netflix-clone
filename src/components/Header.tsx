@@ -22,8 +22,8 @@ const Header = () => {
 
   useEffect(() => {
     window.addEventListener("scroll", onWindowScroll);
-    () => window.removeEventListener("scroll", onWindowScroll);
-  });
+    return () => window.removeEventListener("scroll", onWindowScroll);
+  }, []);
   return (
     <header
       className={`${
