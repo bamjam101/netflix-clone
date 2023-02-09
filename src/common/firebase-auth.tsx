@@ -37,31 +37,28 @@ export const AuthProvider = ({
 
 export type AuthContextType = ReturnType<typeof useProvideAuth>;
 
-export const useAuth = () => useContext(AuthContext) ?? ({} as AuthContextType);
-
 function useProvideAuth() {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(auth.currentUser);
 
   const signUp = (email: string, password: string) =>
     createUserWithEmailAndPassword(auth, email, password).then(({ user }) => {
-      setUser(user);
       return user;
     });
 
   const signIn = (email: string, password: string) =>
-    signInWithEmailAndPassword(auth, email, password).then(({ user }) =>
-      setUser(user)
-    );
+    signInWithEmailAndPassword(auth, email, password).then(({ user }) => {
+      return user;
+    });
 
-  const signOutUser = () => signOut(auth).then(() => setUser(null));
+  const signOutUser = signOut(auth);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      user ? setUser(user) : setUser(null);
+      setUser(user);
     });
 
     return () => unsubscribe();
-  });
+  }, []);
 
   return {
     signIn,
@@ -70,3 +67,5 @@ function useProvideAuth() {
     user,
   };
 }
+
+export const useAuth = () => useContext(AuthContext) ?? ({} as AuthContextType);

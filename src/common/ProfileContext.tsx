@@ -27,7 +27,7 @@ const ProfilesProvider = ({ children }: { children: React.ReactElement }) => {
         dispatch({ type: "load", payload: userProfiles });
       }
     }
-  }, []);
+  }, [user?.email, state]);
   return (
     <ProfileContext.Provider value={state}>
       <ProfileDispatchContext.Provider value={dispatch}>

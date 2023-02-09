@@ -12,14 +12,18 @@ import ProfileImg from "/Netflix-avatar.png";
 
 function ProfileButton({
   buttonType = "primary",
+  rounded = false,
   ...props
 }: {
-  buttonType?: "primary" | "secondary";
-} & React.HTMLAttributes<HTMLButtonElement>) {
+  buttonType?: "primary" | "secondary" | "rounded";
+  rounded?: boolean;
+} & React.ButtonHTMLAttributes<HTMLButtonElement>) {
   return (
     <button
       {...props}
       className={`py-2 px-4 text-xl ${
+        rounded ? "rounded-md" : "rounded-none"
+      } ${
         buttonType === "primary"
           ? "bg-gray-100 text-dark hover:bg-netflixred hover:text-white"
           : "border border-white text-gray-400 hover:text-white"
@@ -46,6 +50,7 @@ function ProfileCard({
     event.stopPropagation();
     onEditClick(profile);
   }
+
   return (
     <section
       id={id}
@@ -72,7 +77,7 @@ function ProfileCard({
         ) : null}
       </div>
       <h2 className="md:text-md text-sm transition-all duration-200 group-hover:font-semibold lg:text-lg">
-        {edit}
+        {name}
       </h2>
     </section>
   );
@@ -83,42 +88,74 @@ function EditProfile(props: {
   onClose: (value: boolean) => void;
   title: string;
   edit?: boolean;
+  profile: UserProfile;
+  onSave?: (profile: UserProfile) => void;
+  closeEditor: () => void;
 }) {
-  const heading = props.edit ? "Edit Profile" : "Add Profile";
+  const heading = props.profile?.id ? "Edit Profile" : "Add Profile";
+
+  function onSubmit(event: React.FormEvent) {
+    event.preventDefault();
+    const { profileName } = event.target as typeof event.target & {
+      profileName: HTMLInputElement;
+    };
+    if (props.onSave) {
+      let profile: UserProfile = {
+        name: profileName.value,
+        id: props?.profile.id,
+        imageUrl: props?.profile.imageUrl,
+      };
+      props.onSave(profile);
+    }
+  }
   return (
     <Modal {...props}>
-      <section className="grid h-screen w-screen place-items-center">
-        <section className="flex min-h-[40vh] min-w-[40vh] flex-col items-center justify-center gap-2 rounded-2xl bg-netflixred/10 text-white">
+      <section className="grid h-screen w-screen place-items-center bg-netflixred/10 ">
+        <form
+          onSubmit={onSubmit}
+          className="flex min-h-[40vh] min-w-[40vh] flex-col items-center justify-center gap-2 rounded-2xl bg-dark text-white"
+        >
           <h1>{heading}</h1>
           <section className="grid w-full grid-cols-[30%_1fr] gap-2 px-4 py-2">
             <div className="grid w-full items-center">
               <img
-                src={ProfileImg}
+                src={props.profile?.imageUrl}
                 alt="profile-image"
                 className="h-[10vh] w-[10vh] rounded-md"
               />
             </div>
-            <form className="flex w-full flex-col items-center justify-center gap-1">
+            <section className="flex w-full flex-col items-center justify-center gap-2">
               <input
                 type="text"
+                defaultValue={props.profile?.name}
                 placeholder="New Username"
-                id="username"
-                name="username"
-                className="w-full rounded-md bg-zinc-500 p-2 text-gray-300"
+                id="profileName"
+                name="profileName"
+                className="w-full rounded-md bg-zinc-500 p-2 text-gray-300 outline-none"
               />
-              <button className="w-full rounded-md bg-netflixred py-1 font-semibold">
-                Done
-              </button>
-            </form>
+              <section className="flex gap-10">
+                <ProfileButton rounded={true} type="submit">
+                  Done
+                </ProfileButton>
+                <ProfileButton
+                  type="button"
+                  onClick={props.closeEditor}
+                  rounded={true}
+                  buttonType="secondary"
+                >
+                  Cancel
+                </ProfileButton>
+              </section>
+            </section>
           </section>
-        </section>
+        </form>
       </section>
     </Modal>
   );
 }
 
 const ProfileList = ({ edit }: { edit: boolean }) => {
-  const userProfile = useProfileContext();
+  const userProfiles = useProfileContext();
   const dispatch = useDispatchContext() as React.Dispatch<ActionType>;
   const [profile, setProfile] = useState<UserProfile>();
   const navigate = useNavigate();
@@ -139,33 +176,59 @@ const ProfileList = ({ edit }: { edit: boolean }) => {
     dispatch({ type: "current", payload: profile });
     navigate("/browse");
   }
+
+  function onAddProfile() {
+    const newProfile: UserProfile = {
+      id: "",
+      name: "",
+      imageUrl: `/profile${(userProfiles?.profiles?.length ?? 0) + 1}.png`,
+    };
+    setProfile(newProfile);
+    openEditor();
+  }
+
+  function onSaveProfile(profile: UserProfile) {
+    const action: ActionType = {
+      type: profile.id ? "edit" : "add",
+      payload: profile,
+    };
+    dispatch(action);
+    setIsProfileEditorOpen(false);
+  }
   const heading = !edit ? "Who's watching?" : "Manage Profiles";
   return (
     <article className="flex flex-col items-center justify-center gap-4">
       <header>
         <h1 className="text-4xl">{heading}</h1>
       </header>
-      <section className="flex items-center justify-center gap-2">
-        {userProfile?.profiles?.map((profile) => {
-          <ProfileCard
-            key={profile.id}
-            profile={profile as UserProfile}
-            onEditClick={openEditor}
-            edit={edit}
-            onProfileClick={onProfileClick}
-          />;
+      <section className="flex items-center justify-center gap-4">
+        {userProfiles?.profiles?.map((profile) => {
+          return (
+            <ProfileCard
+              key={profile.id}
+              profile={profile as UserProfile}
+              onEditClick={openEditor}
+              edit={edit}
+              onProfileClick={onProfileClick}
+            />
+          );
         })}
-        <AddProfileCard edit={edit} />
+        <AddProfileCard onAddProfile={onAddProfile} />
       </section>
+      {profile ? (
+        <EditProfile
+          edit={edit}
+          isOpen={isProfileEditorOpen}
+          onClose={closeEditor}
+          title=""
+          profile={profile}
+          onSave={onSaveProfile}
+          closeEditor={closeEditor}
+        />
+      ) : null}
       {edit ? (
         <>
           <ProfileButton>Done</ProfileButton>
-          <EditProfile
-            edit={edit}
-            isOpen={isProfileEditorOpen}
-            onClose={closeEditor}
-            title=""
-          />
         </>
       ) : (
         <ProfileButton onClick={manageProfile} buttonType="secondary">

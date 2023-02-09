@@ -8,16 +8,17 @@ const Login = () => {
   const navigate = useNavigate();
   const { signIn } = useAuth();
 
-  const authenticateUser = async (event: React.SyntheticEvent) => {
+  async function authenticateUser(event: React.SyntheticEvent) {
     event.preventDefault();
     const { email, password } = event.target as typeof event.target & {
       email: HTMLInputElement;
       password: HTMLInputElement;
     };
     const user = await signIn(email.value, password.value);
-    console.log(user);
-    navigate("/");
-  };
+    if (user) {
+      navigate("/");
+    }
+  }
   return (
     <>
       <header className="relative z-[1] w-56">
