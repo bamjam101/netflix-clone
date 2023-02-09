@@ -51,6 +51,7 @@ function updateProfiles(profiles: StoredProfiles) {
 }
 
 export const useProfileContext = () => useContext(ProfileContext);
-export const useDispatchContext = () => useContext(ProfileDispatchContext);
+export const useDispatchContext = () =>
+  useContext(ProfileDispatchContext) as React.Dispatch<ActionType>;
 
 export default ProfilesProvider;

@@ -4,6 +4,7 @@ import {
   createRoutesFromElements,
   Navigate,
   Outlet,
+  redirect,
   Route,
   RouterProvider,
 } from "react-router-dom";
@@ -16,14 +17,15 @@ import Profile from "./pages/Profile";
 import SignUp from "./pages/SignUp";
 
 function ProtectedRoute({ children }: { children: React.ReactElement }) {
-  const { user } = useAuth();
-  // if (!user) {
+  const { user, isLoading } = useAuth();
+  // if (!user && !isLoading) {
   //   return <Navigate to="/login" />;
   // }
   return children;
 }
 
 function AppRouter() {
+  const { isLoading, user } = useAuth();
   const router = createBrowserRouter(
     createRoutesFromElements(
       <>
@@ -49,7 +51,13 @@ function AppRouter() {
       </>
     )
   );
-  return <RouterProvider router={router}></RouterProvider>;
+  return isLoading ? (
+    <section className="grid h-screen w-screen place-items-center bg-dark text-4xl">
+      Loading...
+    </section>
+  ) : (
+    <RouterProvider router={router}></RouterProvider>
+  );
 }
 
 function App() {

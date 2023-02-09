@@ -39,6 +39,7 @@ export type AuthContextType = ReturnType<typeof useProvideAuth>;
 
 function useProvideAuth() {
   const [user, setUser] = useState<User | null>(auth.currentUser);
+  const [isLoading, setIsLoading] = useState(true);
 
   const signUp = (email: string, password: string) =>
     createUserWithEmailAndPassword(auth, email, password).then(({ user }) => {
@@ -50,10 +51,11 @@ function useProvideAuth() {
       return user;
     });
 
-  const signOutUser = signOut(auth);
+  const signOutUser = () => signOut(auth);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setIsLoading(false);
       setUser(user);
     });
 
@@ -65,6 +67,7 @@ function useProvideAuth() {
     signUp,
     signOutUser,
     user,
+    isLoading,
   };
 }
 

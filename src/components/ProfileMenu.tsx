@@ -1,9 +1,22 @@
 import { ExpandMore } from "@mui/icons-material";
+import { UserProfile } from "firebase/auth";
 import { MouseEvent, useEffect, useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../common/firebase-auth";
+import {
+  useDispatchContext,
+  useProfileContext,
+} from "../common/ProfileContext";
 
 const ProfileMenu = () => {
+  const userProfiles = useProfileContext();
+  const dispatch = useDispatchContext();
+  const currentProfile = userProfiles?.profiles?.find(
+    (profile) => profile.id === userProfiles.selectedProfileId
+  );
+  const { signOutUser } = useAuth();
+  const navigate = useNavigate();
   const [showProfileMenu, setShowProfileMenu] = useState(false);
-  const profileMenuRef = useRef<HTMLSelectElement>(null);
 
   function handleProfileClick(event: MouseEvent<HTMLButtonElement>) {
     event.stopPropagation();
@@ -16,19 +29,28 @@ const ProfileMenu = () => {
     }
   }
 
+  async function handleSignOut() {
+    await signOutUser();
+    navigate("/login");
+  }
+
+  function loadProfile(profile: UserProfile) {
+    dispatch({ type: "current", payload: profile });
+  }
+
   useEffect(() => {
     window.addEventListener("click", onWindowClick);
     return () => window.removeEventListener("click", onWindowClick);
   });
   return (
     <>
-      <section ref={profileMenuRef} className="relative">
+      <section className="relative" id={currentProfile?.id}>
         <button
           className="flex items-center gap-2"
           onClick={handleProfileClick}
         >
           <img
-            src="/Netflix-avatar.png"
+            src={currentProfile?.imageUrl}
             alt="user-profile"
             className="h-8 w-8 rounded-lg object-contain"
           />
@@ -41,12 +63,43 @@ const ProfileMenu = () => {
           />
         </button>
         {showProfileMenu ? (
-          <ul className="absolute -left-[64px] flex  w-[140px] list-none flex-col justify-center gap-4 rounded-md bg-dark/80 px-4 py-2 sm:-left-[74px] sm:top-[36px] md:-left-[84px] md:top-[60px] lg:-left-[94px] lg:w-[150px]">
-            <li>Username</li>
-            <li>Manage Profile</li>
-            <li>Account</li>
-            <li>Help Center</li>
-            <li>Sign Out</li>
+          <ul className="absolute -left-[64px] flex w-[140px] list-none flex-col justify-center gap-4 rounded-md bg-dark px-1 py-1 text-sm sm:-left-[74px] sm:top-[36px] md:-left-[84px] md:top-[60px] lg:-left-[94px] lg:w-[150px]">
+            {userProfiles?.profiles
+              .filter((profile) => profile.id !== currentProfile?.id)
+              ?.map((profile) => {
+                return (
+                  <li
+                    onClick={() => loadProfile(profile)}
+                    key={profile.id}
+                    className="text-md border-b-2 px-3 py-2 text-white/90"
+                  >
+                    <img
+                      src={profile.imageUrl}
+                      alt={profile.name}
+                      className="h-8 w-8"
+                    />{" "}
+                    {profile.name}
+                  </li>
+                );
+              })}
+
+            {userProfiles?.profiles.length ?? 0 > 1 ? (
+              <li className="cursor-pointer rounded-md px-3 py-2 hover:bg-gray-800">
+                <Link to="/editProfile">Manage Profile</Link>
+              </li>
+            ) : null}
+            <li className="cursor-pointer rounded-md px-3 py-2 hover:bg-gray-800">
+              Account
+            </li>
+            <li className="cursor-pointer rounded-md px-3 py-2 hover:bg-gray-800">
+              Help Center
+            </li>
+            <li
+              className="cursor-pointer rounded-md px-3 py-2 hover:bg-gray-800"
+              onClick={handleSignOut}
+            >
+              Sign Out
+            </li>
           </ul>
         ) : null}
       </section>

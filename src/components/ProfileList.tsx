@@ -1,4 +1,4 @@
-import { Add, Edit } from "@mui/icons-material";
+import { Edit } from "@mui/icons-material";
 import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
@@ -8,7 +8,6 @@ import {
 import { ActionType, UserProfile } from "../common/types";
 import AddProfileCard from "./AddProfileCard";
 import Modal from "./Modal";
-import ProfileImg from "/Netflix-avatar.png";
 
 function ProfileButton({
   buttonType = "primary",
@@ -177,6 +176,11 @@ const ProfileList = ({ edit }: { edit: boolean }) => {
     navigate("/browse");
   }
 
+  function editProfile(profile: UserProfile) {
+    setProfile(profile);
+    openEditor();
+  }
+
   function onAddProfile() {
     const newProfile: UserProfile = {
       id: "",
@@ -207,7 +211,7 @@ const ProfileList = ({ edit }: { edit: boolean }) => {
             <ProfileCard
               key={profile.id}
               profile={profile as UserProfile}
-              onEditClick={openEditor}
+              onEditClick={editProfile}
               edit={edit}
               onProfileClick={onProfileClick}
             />
