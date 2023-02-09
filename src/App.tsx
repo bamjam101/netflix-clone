@@ -1,12 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   createBrowserRouter,
   createRoutesFromElements,
   Navigate,
   Outlet,
-  redirect,
   Route,
   RouterProvider,
+  useLocation,
 } from "react-router-dom";
 import { AuthProvider, useAuth } from "./common/firebase-auth";
 import ProfilesProvider from "./common/ProfileContext";
@@ -18,14 +18,15 @@ import SignUp from "./pages/SignUp";
 
 function ProtectedRoute({ children }: { children: React.ReactElement }) {
   const { user, isLoading } = useAuth();
-  // if (!user && !isLoading) {
-  //   return <Navigate to="/login" />;
-  // }
+  if (!user) {
+    return <Navigate to="/login" />;
+  }
   return children;
 }
 
 function AppRouter() {
   const { isLoading, user } = useAuth();
+
   const router = createBrowserRouter(
     createRoutesFromElements(
       <>

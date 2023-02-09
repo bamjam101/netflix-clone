@@ -1,4 +1,4 @@
-import { Edit } from "@mui/icons-material";
+import { Close, Delete, Edit, Save } from "@mui/icons-material";
 import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
@@ -90,6 +90,7 @@ function EditProfile(props: {
   profile: UserProfile;
   onSave?: (profile: UserProfile) => void;
   closeEditor: () => void;
+  onDelete?: (profile: UserProfile) => void;
 }) {
   const heading = props.profile?.id ? "Edit Profile" : "Add Profile";
 
@@ -114,13 +115,13 @@ function EditProfile(props: {
           onSubmit={onSubmit}
           className="flex min-h-[40vh] min-w-[40vh] flex-col items-center justify-center gap-2 rounded-2xl bg-dark text-white"
         >
-          <h1>{heading}</h1>
+          <h1 className="text-2xl font-bold">{heading}</h1>
           <section className="grid w-full grid-cols-[30%_1fr] gap-2 px-4 py-2">
             <div className="grid w-full items-center">
               <img
                 src={props.profile?.imageUrl}
                 alt="profile-image"
-                className="h-[10vh] w-[10vh] rounded-md"
+                className="h-[10vh] w-[10vh] rounded-md md:h-[15vh] md:w-[15vh]"
               />
             </div>
             <section className="flex w-full flex-col items-center justify-center gap-2">
@@ -132,17 +133,31 @@ function EditProfile(props: {
                 name="profileName"
                 className="w-full rounded-md bg-zinc-500 p-2 text-gray-300 outline-none"
               />
-              <section className="flex gap-10">
+              <section className="flex gap-2">
                 <ProfileButton rounded={true} type="submit">
-                  Done
+                  <Save /> Save
                 </ProfileButton>
+                {props.profile.id ? (
+                  <ProfileButton
+                    type="button"
+                    onClick={() => {
+                      if (props.onDelete) {
+                        props.onDelete(props.profile);
+                      }
+                    }}
+                    rounded={true}
+                    buttonType="secondary"
+                  >
+                    <Delete /> Delete
+                  </ProfileButton>
+                ) : null}
                 <ProfileButton
                   type="button"
                   onClick={props.closeEditor}
                   rounded={true}
                   buttonType="secondary"
                 >
-                  Cancel
+                  <Close /> Cancel
                 </ProfileButton>
               </section>
             </section>
@@ -199,6 +214,11 @@ const ProfileList = ({ edit }: { edit: boolean }) => {
     dispatch(action);
     setIsProfileEditorOpen(false);
   }
+
+  function onDeleteProfile(profile: UserProfile) {
+    dispatch({ type: "delete", payload: profile });
+    setIsProfileEditorOpen(false);
+  }
   const heading = !edit ? "Who's watching?" : "Manage Profiles";
   return (
     <article className="flex flex-col items-center justify-center gap-4">
@@ -217,7 +237,9 @@ const ProfileList = ({ edit }: { edit: boolean }) => {
             />
           );
         })}
-        <AddProfileCard onAddProfile={onAddProfile} />
+        {userProfiles?.profiles?.length ?? 0 < 3 ? (
+          <AddProfileCard onAddProfile={onAddProfile} />
+        ) : null}
       </section>
       {profile ? (
         <EditProfile
@@ -228,11 +250,18 @@ const ProfileList = ({ edit }: { edit: boolean }) => {
           profile={profile}
           onSave={onSaveProfile}
           closeEditor={closeEditor}
+          onDelete={onDeleteProfile}
         />
       ) : null}
       {edit ? (
         <>
-          <ProfileButton>Done</ProfileButton>
+          <ProfileButton
+            onClick={() => {
+              navigate("/");
+            }}
+          >
+            Done
+          </ProfileButton>
         </>
       ) : (
         <ProfileButton onClick={manageProfile} buttonType="secondary">

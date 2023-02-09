@@ -22,11 +22,11 @@ const ContentRow = ({ title, endpoint }: RowProp) => {
   const cardsContainerRef = useRef<HTMLSelectElement>(null);
   const disablePrev = currentPage === 0;
   const disableNext = currentPage + 1 === pagesCount;
-  async function fetchPopularList() {
+  async function fetchRowData() {
     const popularList = await fetchRequest<MovieResponse<MovieResult[]>>(
       endpoint
     );
-    setRowData(popularList.results);
+    setRowData(popularList.results.filter((result) => result.poster_path));
   }
 
   function slideLeft() {
@@ -69,7 +69,7 @@ const ContentRow = ({ title, endpoint }: RowProp) => {
   }, [rowData.length]);
 
   useEffect(() => {
-    fetchPopularList();
+    fetchRowData();
   }, []);
   return (
     <li className="group/main relative">

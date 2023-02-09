@@ -1,5 +1,4 @@
 import { Add } from "@mui/icons-material";
-import React from "react";
 
 const AddProfileCard = ({ onAddProfile }: { onAddProfile: () => void }) => {
   return (

@@ -81,7 +81,7 @@ export default function MovieCard({
       <article
         ref={movieCardRef}
         key={uid}
-        className="group/card grid grid-rows-[70%_30%]"
+        className="group/card grid cursor-pointer grid-rows-[70%_30%]"
       >
         <section className="h-[250px] w-[200px]">
           <img
@@ -91,7 +91,7 @@ export default function MovieCard({
             className="h-full w-full object-contain transition-transform duration-200 group-hover/card:scale-110"
           />
         </section>
-        <section className="flex flex-col px-2">
+        <section className="flex flex-col overflow-hidden px-4">
           <h3 className="text-sm font-semibold transition-transform duration-200 line-clamp-1 group-hover/card:scale-100">
             {title}
           </h3>

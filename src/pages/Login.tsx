@@ -1,12 +1,12 @@
 import NetflixLogo from "../assets/Netflix_Logo_RGB.png";
-import React from "react";
+import React, { useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import Background from "../components/Background";
 import { useAuth } from "../common/firebase-auth";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { signIn } = useAuth();
+  const { signIn, user } = useAuth();
 
   async function authenticateUser(event: React.SyntheticEvent) {
     event.preventDefault();
@@ -14,11 +14,19 @@ const Login = () => {
       email: HTMLInputElement;
       password: HTMLInputElement;
     };
-    const user = await signIn(email.value, password.value);
+    const userProfile = await signIn(email.value, password.value);
+    if (userProfile) {
+      navigate("/");
+    } else {
+      console.log("Error in redirect during login process.");
+    }
+  }
+
+  useEffect(() => {
     if (user) {
       navigate("/");
     }
-  }
+  }, []);
   return (
     <>
       <header className="relative z-[1] w-56">

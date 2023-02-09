@@ -1,7 +1,7 @@
 import { ExpandMore } from "@mui/icons-material";
 import { UserProfile } from "firebase/auth";
 import { MouseEvent, useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../common/firebase-auth";
 import {
   useDispatchContext,
@@ -31,11 +31,13 @@ const ProfileMenu = () => {
 
   async function handleSignOut() {
     await signOutUser();
+    dispatch({ type: "load", payload: {} });
     navigate("/login");
   }
 
   function loadProfile(profile: UserProfile) {
     dispatch({ type: "current", payload: profile });
+    window.location.reload();
   }
 
   useEffect(() => {
@@ -64,38 +66,40 @@ const ProfileMenu = () => {
         </button>
         {showProfileMenu ? (
           <ul className="absolute -left-[64px] flex w-[140px] list-none flex-col justify-center gap-4 rounded-md bg-dark px-1 py-1 text-sm sm:-left-[74px] sm:top-[36px] md:-left-[84px] md:top-[60px] lg:-left-[94px] lg:w-[150px]">
-            {userProfiles?.profiles
-              .filter((profile) => profile.id !== currentProfile?.id)
-              ?.map((profile) => {
-                return (
-                  <li
-                    onClick={() => loadProfile(profile)}
-                    key={profile.id}
-                    className="text-md border-b-2 px-3 py-2 text-white/90"
-                  >
-                    <img
-                      src={profile.imageUrl}
-                      alt={profile.name}
-                      className="h-8 w-8"
-                    />{" "}
-                    {profile.name}
-                  </li>
-                );
-              })}
+            <section className="flex w-full items-center justify-center gap-2 border-b-2">
+              {userProfiles?.profiles
+                .filter((profile) => profile.id !== currentProfile?.id)
+                ?.map((profile) => {
+                  return (
+                    <li
+                      onClick={() => loadProfile(profile)}
+                      key={profile.id}
+                      className="text-md cursor-pointer px-3 py-2 font-semibold text-white"
+                    >
+                      <img
+                        src={profile.imageUrl}
+                        alt={profile.name}
+                        className="h-8 w-8"
+                      />{" "}
+                      {profile.name}
+                    </li>
+                  );
+                })}
+            </section>
 
-            {userProfiles?.profiles.length ?? 0 > 1 ? (
-              <li className="cursor-pointer rounded-md px-3 py-2 hover:bg-gray-800">
+            {userProfiles?.profiles.length ?? 0 > 0 ? (
+              <li className="cursor-pointer rounded-md px-3 py-2 text-white/80 hover:bg-gray-800 hover:text-white/90">
                 <Link to="/editProfile">Manage Profile</Link>
               </li>
             ) : null}
-            <li className="cursor-pointer rounded-md px-3 py-2 hover:bg-gray-800">
+            <li className="cursor-pointer rounded-md px-3 py-2 text-white/80 hover:bg-gray-800 hover:text-white/90">
               Account
             </li>
-            <li className="cursor-pointer rounded-md px-3 py-2 hover:bg-gray-800">
+            <li className="cursor-pointer rounded-md px-3 py-2 text-white/80 hover:bg-gray-800 hover:text-white/90">
               Help Center
             </li>
             <li
-              className="cursor-pointer rounded-md px-3 py-2 hover:bg-gray-800"
+              className="cursor-pointer rounded-md px-3 py-2 text-white/80 hover:bg-gray-800 hover:text-white/90"
               onClick={handleSignOut}
             >
               Sign Out
