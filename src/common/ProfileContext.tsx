@@ -21,7 +21,7 @@ const ProfilesProvider = ({ children }: { children: React.ReactElement }) => {
     if (user?.email) {
       if (state) {
         const storedProfiles = getProfiles();
-        storedProfiles.set(user.email, state);
+        storedProfiles.set(user.email, state as ProfilesContextType);
         updateProfiles(storedProfiles);
       } else {
         dispatch({ type: "load", payload: userProfiles });

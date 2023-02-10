@@ -11,6 +11,7 @@ import {
 import { AuthProvider, useAuth } from "./common/firebase-auth";
 import ProfilesProvider from "./common/ProfileContext";
 import Layout from "./components/Layout";
+import Loader from "./components/Loader";
 import Browse from "./pages/Browse";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
@@ -53,9 +54,7 @@ function AppRouter() {
     )
   );
   return isLoading ? (
-    <section className="grid h-screen w-screen place-items-center bg-dark text-4xl">
-      Loading...
-    </section>
+    <Loader />
   ) : (
     <RouterProvider router={router}></RouterProvider>
   );

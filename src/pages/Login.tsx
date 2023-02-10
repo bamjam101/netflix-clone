@@ -26,7 +26,7 @@ const Login = () => {
     if (user) {
       navigate("/");
     }
-  }, []);
+  }, [user]);
   return (
     <>
       <header className="relative z-[1] w-56">
@@ -46,12 +46,14 @@ const Login = () => {
                 type="email"
                 name="email"
                 id="email"
+                placeholder="Email Address"
               />
               <input
                 className="rounded-md bg-zinc-500 p-2 text-gray-300"
                 type="password"
                 name="password"
                 id="password"
+                placeholder="Password"
               />
             </section>
             <section>

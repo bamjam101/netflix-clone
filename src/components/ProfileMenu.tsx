@@ -87,7 +87,7 @@ const ProfileMenu = () => {
                 })}
             </section>
 
-            {userProfiles?.profiles.length ?? 0 > 0 ? (
+            {(userProfiles?.profiles.length ?? 0) > 1 ? (
               <li className="cursor-pointer rounded-md px-3 py-2 text-white/80 hover:bg-gray-800 hover:text-white/90">
                 <Link to="/editProfile">Manage Profile</Link>
               </li>

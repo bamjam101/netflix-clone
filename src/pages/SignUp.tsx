@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import Background from "../components/Background";
 import Header from "../components/Header";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../common/firebase-auth";
 
 const Signup = () => {
   const navigate = useNavigate();
-  const { signUp, user } = useAuth();
+  const { signUp } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [formValues, setFormValues] = useState({
     email: "",
@@ -17,17 +17,11 @@ const Signup = () => {
     try {
       const { email, password } = formValues;
       await signUp(email, password);
-      console.log(email, password);
+      navigate("/login");
     } catch (err) {
       console.log(err);
     }
   };
-
-  useEffect(() => {
-    if (user) {
-      navigate("/");
-    }
-  });
   return (
     <div className="grid h-screen w-screen grid-rows-[8vh_0_1fr] bg-dark/50">
       <Header />
@@ -86,6 +80,13 @@ const Signup = () => {
         {showPassword ? (
           <SignUpButton onClick={handleSignIn}>Sign Up</SignUpButton>
         ) : null}
+        <p className="text-white/50">
+          Already have a account?{" "}
+          <NavLink className="font-semibold text-white" to="/login">
+            Sign In
+          </NavLink>{" "}
+          Now.
+        </p>
       </section>
     </div>
   );

@@ -1,4 +1,4 @@
-import { Notifications, Person, Search } from "@mui/icons-material";
+import { Notifications} from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import NetflixLogo from "../assets/Netflix_Logo_RGB.png";
