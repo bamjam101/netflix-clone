@@ -29,7 +29,7 @@ export default function MovieCard({
 }: MovieCardProp) {
   const movieCardRef = useRef<HTMLSelectElement>(null);
   const [isSmallScreen, setIsSmallScreen] = useState(false);
-  let modalWidth = isSmallScreen ? 300 : 400;
+  let modalWidth = isSmallScreen ? 350 : 400;
   const [isOpen, setIsOpen] = useState(false);
   const [hidePoster, setHidePoster] = useState(false);
   const [position, setPosition] = useState<Position | null>(null);
@@ -51,22 +51,39 @@ export default function MovieCard({
     if (totalWidth > document.body.clientWidth) {
       left = left - (totalWidth - document.body.clientWidth);
     }
+
+    if (isSmallScreen) {
+      top = 100;
+      left = 40;
+    }
+    console.log(top, left);
     setIsOpen(true);
     setVideoInfo(videoInfo);
-    setPosition(isSmallScreen ? null : { top, left });
+    setPosition({ top, left });
   }
 
   function closeModal() {
     setIsOpen(false);
   }
 
+  const handleResize = () => {
+    if (window.innerWidth < 720) {
+      setIsSmallScreen(true);
+    } else {
+      setIsSmallScreen(false);
+    }
+  };
+
   useEffect(() => {
     movieCardRef.current?.addEventListener("mouseover", handleMouseOver);
-    if (document.body.clientWidth < 600) {
+    if (window.innerWidth < 720) {
       setIsSmallScreen(true);
     }
+
+    window.addEventListener("resize", handleResize);
     () => {
       movieCardRef.current?.removeEventListener("mouseover", handleMouseOver);
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
 

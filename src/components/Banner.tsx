@@ -62,7 +62,7 @@ export default function Banner() {
 
   useEffect(() => {
     fetcPopularMovies();
-    if (document.body.clientWidth < 600) {
+    if (window.innerWidth < 720) {
       setIsSmallScreen(true);
     }
   }, []);

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { lazy } from "react";
 import {
   createBrowserRouter,
   createRoutesFromElements,
@@ -6,17 +6,17 @@ import {
   Outlet,
   Route,
   RouterProvider,
-  useLocation,
 } from "react-router-dom";
 import { AuthProvider, useAuth } from "./common/firebase-auth";
 import ProfilesProvider from "./common/ProfileContext";
-import Layout from "./components/Layout";
-import Loader from "./components/Loader";
-import RouteError from "./components/RouteError";
-import Browse from "./pages/Browse";
-import Login from "./pages/Login";
-import Profile from "./pages/Profile";
-import SignUp from "./pages/SignUp";
+
+const Layout = lazy(() => import("./components/Layout"));
+const Loader = lazy(() => import("./components/Loader"));
+const RouteError = lazy(() => import("./components/RouteError"));
+const Browse = lazy(() => import("./pages/Browse"));
+const Login = lazy(() => import("./pages/Login"));
+const Profile = lazy(() => import("./pages/Profile"));
+const SignUp = lazy(() => import("./pages/SignUp"));
 
 function ProtectedRoute({ children }: { children: React.ReactElement }) {
   const { user, isLoading } = useAuth();
@@ -27,7 +27,7 @@ function ProtectedRoute({ children }: { children: React.ReactElement }) {
 }
 
 function AppRouter() {
-  const { isLoading, user } = useAuth();
+  const { isLoading } = useAuth();
 
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -58,7 +58,9 @@ function AppRouter() {
   return isLoading ? (
     <Loader />
   ) : (
-    <RouterProvider router={router}></RouterProvider>
+    <React.Suspense fallback={<Loader />}>
+      <RouterProvider router={router}></RouterProvider>
+    </React.Suspense>
   );
 }
 
