@@ -12,6 +12,7 @@ import { AuthProvider, useAuth } from "./common/firebase-auth";
 import ProfilesProvider from "./common/ProfileContext";
 import Layout from "./components/Layout";
 import Loader from "./components/Loader";
+import RouteError from "./components/RouteError";
 import Browse from "./pages/Browse";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
@@ -38,6 +39,7 @@ function AppRouter() {
               <Outlet />
             </ProtectedRoute>
           }
+          errorElement={<RouteError />}
         >
           <Route index element={<Profile />} />
           <Route path="editProfile" element={<Profile edit={true} />} />

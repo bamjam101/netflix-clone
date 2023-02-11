@@ -16,9 +16,12 @@ export default function Banner() {
   const [videoInfo, setVideoInfo] = useState<MovieVideoInfo | null>(null);
   const [hidePoster, setHidePoster] = useState(false);
   const [backdropVisible, setBackdropVisible] = useState(true);
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
+  let videoHeight = isSmallScreen ? "400" : "800";
+
   const options: YouTubeProps["opts"] = {
     width: document.body.clientWidth,
-    height: "800",
+    height: videoHeight,
     playerVars: {
       autoplay: true,
       playsInline: 1,
@@ -59,9 +62,12 @@ export default function Banner() {
 
   useEffect(() => {
     fetcPopularMovies();
+    if (document.body.clientWidth < 600) {
+      setIsSmallScreen(true);
+    }
   }, []);
   return randomMovie ? (
-    <article className="relative aspect-video h-[800px] w-full">
+    <article className="relative aspect-video h-[400px] w-full md:h-[600px] lg:h-[800px]">
       <img
         src={createPosterUrl(randomMovie?.backdrop_path ?? "", 0, "original")}
         alt={randomMovie?.title}
@@ -81,15 +87,17 @@ export default function Banner() {
       {backdropVisible ? (
         <section className="absolute top-0 left-0 z-[1] h-full w-full bg-dark/60"></section>
       ) : null}
-      <section className="absolute bottom-24 z-[1] ml-16 flex max-w-sm flex-col gap-2">
-        <h2 className="text-4xl line-clamp-2">{randomMovie.title}</h2>
+      <section className="absolute bottom-16 z-[1] ml-4 flex max-w-sm flex-col gap-2 md:bottom-24 md:ml-16">
+        <h2 className="text-xl line-clamp-2 md:text-2xl lg:text-4xl">
+          {randomMovie.title}
+        </h2>
         <p className="text-sm line-clamp-3">{randomMovie.overview}</p>
         <div className="flex gap-2">
-          <button className="w-[100px] rounded-md bg-white p-2 text-center text-dark">
+          <button className="md:text-md w-[100px] rounded-md bg-white p-2 text-center text-dark sm:text-sm">
             <PlayArrow />
             Play
           </button>
-          <button className="w-auto rounded-md bg-zinc-400 p-2 text-center text-white">
+          <button className="md:text-md w-auto rounded-md bg-zinc-400 p-2 text-center text-white sm:text-sm">
             <InfoOutlined />
             More Info
           </button>

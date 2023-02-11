@@ -1,6 +1,6 @@
-import { Notifications} from "@mui/icons-material";
+import { Notifications } from "@mui/icons-material";
 import { useEffect, useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import NetflixLogo from "../assets/Netflix_Logo_RGB.png";
 import ProfileMenu from "./ProfileMenu";
 import Searchbar from "./Searchbar";

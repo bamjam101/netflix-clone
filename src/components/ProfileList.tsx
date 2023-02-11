@@ -1,6 +1,6 @@
 import { Close, Delete, Edit, Save } from "@mui/icons-material";
 import React, { useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   useDispatchContext,
   useProfileContext,
@@ -20,7 +20,7 @@ function ProfileButton({
   return (
     <button
       {...props}
-      className={`py-2 px-4 text-xl ${
+      className={`py-2 px-4 text-sm sm:text-lg md:text-xl ${
         rounded ? "rounded-md" : "rounded-none"
       } ${
         buttonType === "primary"
@@ -223,7 +223,7 @@ const ProfileList = ({ edit }: { edit: boolean }) => {
   return (
     <article className="flex flex-col items-center justify-center gap-4">
       <header>
-        <h1 className="text-4xl">{heading}</h1>
+        <h1 className="text-xl md:text-2xl lg:text-4xl">{heading}</h1>
       </header>
       <section className="flex items-center justify-center gap-4">
         {userProfiles?.profiles?.map((profile) => {
@@ -246,7 +246,7 @@ const ProfileList = ({ edit }: { edit: boolean }) => {
           edit={edit}
           isOpen={isProfileEditorOpen}
           onClose={closeEditor}
-          title=""
+          title="Add Profile"
           profile={profile}
           onSave={onSaveProfile}
           closeEditor={closeEditor}

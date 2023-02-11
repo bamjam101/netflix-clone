@@ -28,6 +28,8 @@ export default function MovieCard({
   uid,
 }: MovieCardProp) {
   const movieCardRef = useRef<HTMLSelectElement>(null);
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
+  let modalWidth = isSmallScreen ? 300 : 400;
   const [isOpen, setIsOpen] = useState(false);
   const [hidePoster, setHidePoster] = useState(false);
   const [position, setPosition] = useState<Position | null>(null);
@@ -39,7 +41,6 @@ export default function MovieCard({
 
   async function handleMouseOver(e: MouseEvent) {
     const [videoInfo] = await fetchVideoInfo(id.toString());
-    const key = movieCardRef.current;
     let calculatedPosition = movieCardRef.current?.getBoundingClientRect();
     let top = (calculatedPosition?.top ?? 0) - 100;
     let left = (calculatedPosition?.left ?? 0) - 100;
@@ -52,7 +53,7 @@ export default function MovieCard({
     }
     setIsOpen(true);
     setVideoInfo(videoInfo);
-    setPosition({ top, left });
+    setPosition(isSmallScreen ? null : { top, left });
   }
 
   function closeModal() {
@@ -61,6 +62,9 @@ export default function MovieCard({
 
   useEffect(() => {
     movieCardRef.current?.addEventListener("mouseover", handleMouseOver);
+    if (document.body.clientWidth < 600) {
+      setIsSmallScreen(true);
+    }
     () => {
       movieCardRef.current?.removeEventListener("mouseover", handleMouseOver);
     };
@@ -118,17 +122,17 @@ export default function MovieCard({
         <article>
           <section className="grid h-full w-full place-items-center overflow-hidden">
             <img
-              src={createPosterUrl(poster_path, 400)}
+              src={createPosterUrl(poster_path, modalWidth)}
               alt={title}
               className={`object-contain ${
-                hidePoster ? "invisible h-0" : " visible h-[400px]"
+                hidePoster ? "invisible h-0" : `visible h-[${modalWidth}px]`
               }`}
             />
             )
             <YouTube
               opts={{
-                width: "400",
-                height: "400",
+                width: modalWidth.toString(),
+                height: modalWidth.toString(),
                 playerVars: {
                   autoplay: 1,
                   playsInline: 1,

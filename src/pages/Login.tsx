@@ -29,7 +29,7 @@ const Login = () => {
   }, [user]);
   return (
     <>
-      <header className="relative z-[1] w-56">
+      <header className="relative z-[1] w-36 md:w-48 lg:w-56">
         <img className="h-full w-full" src={NetflixLogo} alt="Neflit-Logo" />
       </header>
       <main className="grid h-[60vh] w-full place-items-center">
@@ -39,17 +39,17 @@ const Login = () => {
           className="relative grid min-h-[50vh] w-[90%] place-items-center rounded-lg bg-black/75 p-[2rem] md:w-[40%]"
         >
           <article className="w-full">
-            <h1 className="text-4xl">Sign In</h1>
+            <h1 className="text-xl md:text-2xl lg:text-4xl">Sign In</h1>
             <section className="my-4 flex w-full flex-col gap-4">
               <input
-                className="rounded-md bg-zinc-500 p-2 text-gray-300"
+                className="rounded-md bg-zinc-500 p-2 text-sm text-gray-300 md:text-lg"
                 type="email"
                 name="email"
                 id="email"
                 placeholder="Email Address"
               />
               <input
-                className="rounded-md bg-zinc-500 p-2 text-gray-300"
+                className="rounded-md bg-zinc-500 p-2 text-sm text-gray-300 md:text-lg"
                 type="password"
                 name="password"
                 id="password"
@@ -57,7 +57,7 @@ const Login = () => {
               />
             </section>
             <section>
-              <button className="my-8 w-full rounded-md bg-netflixred py-2 px-4 font-semibold">
+              <button className="my-8 w-full rounded-md bg-netflixred py-2 px-4 text-sm font-semibold md:text-lg">
                 Sign In
               </button>
               <p>
