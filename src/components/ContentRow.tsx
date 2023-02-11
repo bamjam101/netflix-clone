@@ -72,7 +72,7 @@ const ContentRow = ({ title, endpoint }: RowProp) => {
     fetchRowData();
   }, []);
   return (
-    <li className="md:group/main relative">
+    <li className="group/main relative">
       <header className=" pl-4">
         <h2 className="text-lg font-bold">{title}</h2>
       </header>
@@ -80,17 +80,17 @@ const ContentRow = ({ title, endpoint }: RowProp) => {
       <PageIndicator
         pagesCount={pagesCount}
         currentPage={currentPage}
-        className={`opacity-0 transition-opacity md:group-hover/main:opacity-100`}
+        className={`opacity-100 transition-opacity group-hover/main:opacity-100 md:opacity-0`}
       />
 
       <section
         ref={cardsContainerRef}
-        className="scroll-hide md:group/page relative flex flex-nowrap gap-2 overflow-hidden"
+        className="scroll-hide group/page relative flex flex-nowrap gap-2 overflow-hidden"
       >
         {!disablePrev ? (
           <button
             onClick={slideLeft}
-            className="absolute left-0 z-[1] h-full scale-125 bg-clip-border px-4 transition-transform duration-200 hover:scale-150 hover:bg-[rgba(0,0,0,0.5)] sm:opacity-100 md:opacity-0 md:group-hover/main:opacity-50"
+            className="absolute left-0 z-[1] h-full scale-125 bg-clip-border px-4 opacity-50 transition-transform duration-200 hover:scale-150 hover:bg-[rgba(0,0,0,0.5)] group-hover/main:opacity-50 sm:opacity-100 md:opacity-0"
           >
             <ArrowBackIosIcon />
           </button>
@@ -105,7 +105,7 @@ const ContentRow = ({ title, endpoint }: RowProp) => {
         ) : null}
         <section
           ref={sliderRef}
-          className=" flex h-[45vh] gap-2 text-sm transition-transform duration-500 ease-in-out"
+          className={`flex h-[45vh] gap-2 text-sm transition-transform duration-500 ease-in-out`}
         >
           {rowData?.map((row) => (
             <MovieCard

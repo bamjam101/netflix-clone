@@ -93,7 +93,7 @@ const ProfileMenu = () => {
               </li>
             ) : null}
             <li className="cursor-pointer rounded-md px-3 py-2 text-white/80 hover:bg-gray-800 hover:text-white/90">
-              Account
+              <Link to="/">Account</Link>
             </li>
             <li className="cursor-pointer rounded-md px-3 py-2 text-white/80 hover:bg-gray-800 hover:text-white/90">
               Help Center

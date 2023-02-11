@@ -29,17 +29,36 @@ export default function MovieCard({
 }: MovieCardProp) {
   const movieCardRef = useRef<HTMLSelectElement>(null);
   const [isSmallScreen, setIsSmallScreen] = useState(false);
-  let modalWidth = isSmallScreen ? 350 : 400;
+  let modalWidth = isSmallScreen ? 300 : 400;
   const [isOpen, setIsOpen] = useState(false);
   const [hidePoster, setHidePoster] = useState(false);
+  const [playing, setPlaying] = useState(false);
   const [position, setPosition] = useState<Position | null>(null);
   const [videoInfo, setVideoInfo] = useState<MovieVideoInfo | null>(null);
+  let timer: ReturnType<typeof setTimeout> = setTimeout(() => "", 1500);
 
   function onClose(value: boolean) {
     setIsOpen(value);
   }
 
-  async function handleMouseOver(e: MouseEvent) {
+  function handleMouseOver(e: MouseEvent) {
+    timer = setTimeout(() => {
+      setPlaying(true);
+    }, 1500);
+  }
+
+  function handleMouseLeave(e: MouseEvent) {
+    clearTimeout(timer);
+    setPlaying(false);
+  }
+
+  useEffect(() => {
+    if (playing) {
+      playPreview();
+    }
+  }, [playing]);
+
+  async function playPreview() {
     const [videoInfo] = await fetchVideoInfo(id.toString());
     let calculatedPosition = movieCardRef.current?.getBoundingClientRect();
     let top = (calculatedPosition?.top ?? 0) - 100;
@@ -56,10 +75,10 @@ export default function MovieCard({
       top = 100;
       left = 40;
     }
-    console.log(top, left);
-    setIsOpen(true);
-    setVideoInfo(videoInfo);
+
     setPosition({ top, left });
+    setVideoInfo(videoInfo);
+    setIsOpen(true);
   }
 
   function closeModal() {
@@ -76,6 +95,7 @@ export default function MovieCard({
 
   useEffect(() => {
     movieCardRef.current?.addEventListener("mouseover", handleMouseOver);
+    movieCardRef.current?.addEventListener("mouseleave", handleMouseLeave);
     if (window.innerWidth < 720) {
       setIsSmallScreen(true);
     }
@@ -141,8 +161,8 @@ export default function MovieCard({
             <img
               src={createPosterUrl(poster_path, modalWidth)}
               alt={title}
-              className={`object-contain ${
-                hidePoster ? "invisible h-0" : `visible h-[${modalWidth}px]`
+              className={`overflow-hidden object-contain ${
+                hidePoster ? "invisible h-0" : `visible h-[300px]`
               }`}
             />
             )
