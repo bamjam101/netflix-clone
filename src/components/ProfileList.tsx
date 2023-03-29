@@ -237,7 +237,7 @@ const ProfileList = ({ edit }: { edit: boolean }) => {
             />
           );
         })}
-        {userProfiles?.profiles?.length ?? 0 < 3 ? (
+        {(userProfiles?.profiles?.length ?? 0) < 3 ? (
           <AddProfileCard onAddProfile={onAddProfile} />
         ) : null}
       </section>

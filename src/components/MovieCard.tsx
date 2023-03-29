@@ -101,8 +101,10 @@ export default function MovieCard({
     }
 
     window.addEventListener("resize", handleResize);
-    () => {
+    return () => {
       movieCardRef.current?.removeEventListener("mouseover", handleMouseOver);
+      movieCardRef.current?.removeEventListener("mouseleave", handleMouseLeave);
+
       window.removeEventListener("resize", handleResize);
     };
   }, []);
