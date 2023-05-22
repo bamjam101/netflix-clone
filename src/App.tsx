@@ -9,6 +9,7 @@ import {
 } from "react-router-dom";
 import { AuthProvider, useAuth } from "./common/firebase-auth";
 import ProfilesProvider from "./common/ProfileContext";
+import { getItemInLocalStorage } from "./utils";
 
 const Layout = lazy(() => import("./components/Layout"));
 const Loader = lazy(() => import("./components/Loader"));
@@ -19,8 +20,9 @@ const Profile = lazy(() => import("./pages/Profile"));
 const SignUp = lazy(() => import("./pages/SignUp"));
 
 function ProtectedRoute({ children }: { children: React.ReactElement }) {
-  const { user, isLoading } = useAuth();
-  if (!user) {
+  const { user } = useAuth();
+  const dummy = getItemInLocalStorage("DUMMY");
+  if (!user && dummy) {
     return <Navigate to="/login" />;
   }
   return children;

@@ -6,7 +6,7 @@ const Background = () => {
       <section className={`absolute top-0 left-0 -z-[1] max-h-screen w-full`}>
         <img
           src={BackgroundImg}
-          className="h-screen w-full object-cover"
+          className="h-screen w-full object-cover opacity-95"
           alt="background-image"
         />
       </section>

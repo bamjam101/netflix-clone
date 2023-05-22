@@ -75,10 +75,16 @@ export default function MovieCard({
       top = 100;
       left = 40;
     }
-
+    // if (playing) {
     setPosition({ top, left });
     setVideoInfo(videoInfo);
     setIsOpen(true);
+    // } else {
+    //   closeModal();
+    //   setIsOpen(false);
+    //   setVideoInfo(null);
+    //   setPosition(null);
+    // }
   }
 
   function closeModal() {

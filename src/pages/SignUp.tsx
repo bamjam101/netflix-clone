@@ -22,6 +22,10 @@ const Signup = () => {
       console.log(err);
     }
   };
+
+  const handleDirectAccess = () => {
+    localStorage.setItem("DUMMY", "true");
+  };
   return (
     <div className="grid h-screen w-screen grid-rows-[8vh_0_1fr] bg-dark/50">
       <header className="relative z-[1] w-36 md:w-48 lg:w-56">
@@ -82,15 +86,25 @@ const Signup = () => {
         {showPassword ? (
           <SignUpButton onClick={handleSignIn}>Sign Up</SignUpButton>
         ) : null}
-        <p className="text-sm text-white/50 md:text-lg lg:text-xl">
+        <p className="md:text-md text-sm text-white/50 lg:text-lg">
           Already have a account?{" "}
           <NavLink
-            className="font-semibold text-white hover:text-blue-500"
+            className="font-semibold text-white hover:text-red-500"
             to="/login"
           >
             Sign In
           </NavLink>{" "}
           Now.
+        </p>
+        <p className="translate-y-20">
+          Otherwise, to gain direct access{" "}
+          <NavLink
+            onClick={handleDirectAccess}
+            className="font-semibold text-white hover:text-red-500"
+            to="/browse"
+          >
+            Click Here ▶️
+          </NavLink>{" "}
         </p>
       </section>
     </div>

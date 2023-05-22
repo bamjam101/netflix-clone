@@ -1,11 +1,5 @@
 import { Close, Search } from "@mui/icons-material";
-import {
-  MouseEvent,
-  MouseEventHandler,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { MouseEvent, useEffect, useRef, useState } from "react";
 
 const Searchbar = () => {
   const [isOpen, setIsOpen] = useState(false);
