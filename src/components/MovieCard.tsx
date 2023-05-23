@@ -42,6 +42,8 @@ export default function MovieCard({
   }
 
   function handleMouseOver(e: MouseEvent) {
+    clearTimeout(timer);
+    setPlaying(false);
     timer = setTimeout(() => {
       setPlaying(true);
     }, 1500);

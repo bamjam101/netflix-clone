@@ -22,6 +22,10 @@ const Login = () => {
     }
   }
 
+  const handleDirectAccess = () => {
+    localStorage.setItem("DUMMY", "true");
+  };
+
   useEffect(() => {
     if (user) {
       navigate("/");
@@ -62,10 +66,23 @@ const Login = () => {
               </button>
               <p>
                 New to Netflix?{" "}
-                <NavLink className="text-blue-600" to="/signup">
+                <NavLink
+                  className="font-semibold text-blue-600 hover:text-red-500"
+                  to="/signup"
+                >
                   Sign Up
                 </NavLink>{" "}
                 Now.
+              </p>
+              <p className="pt-3">
+                Otherwise, to gain direct access{" "}
+                <NavLink
+                  onClick={handleDirectAccess}
+                  className="font-semibold text-blue-600 hover:text-red-500"
+                  to="/browse"
+                >
+                  Click Here ▶️
+                </NavLink>{" "}
               </p>
             </section>
           </article>
