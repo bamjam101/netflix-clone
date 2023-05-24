@@ -1,7 +1,7 @@
 import { ExpandMore } from "@mui/icons-material";
 import { UserProfile } from "firebase/auth";
 import { MouseEvent, useEffect, useRef, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../common/firebase-auth";
 import {
   useDispatchContext,

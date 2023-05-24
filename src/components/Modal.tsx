@@ -1,4 +1,4 @@
-import { Fragment, LegacyRef, useEffect, useRef } from "react";
+import { Fragment, useRef } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { Position } from "../common/types";
 
@@ -69,7 +69,10 @@ export default function Modal({
                   position ? { position: "fixed", ...position } : undefined
                 }
               >
-                <article className="flex h-full w-full flex-col items-center justify-center">
+                <article
+                  title={title?.toString()}
+                  className="flex h-full w-full flex-col items-center justify-center"
+                >
                   {children}
                 </article>
               </Dialog.Panel>

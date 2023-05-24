@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPosterUrl } from "../utils";
 import Modal from "./Modal";
 import YouTube from "react-youtube";
