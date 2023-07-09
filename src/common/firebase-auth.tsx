@@ -11,12 +11,12 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyAAzlvau-HoRQDsTy9oKgLPY9uQQtfbKZA",
-  authDomain: "netflix-clone-4fcab.firebaseapp.com",
-  projectId: "netflix-clone-4fcab",
-  storageBucket: "netflix-clone-4fcab.appspot.com",
-  messagingSenderId: "66722546400",
-  appId: "1:66722546400:web:b85390ba6874dea28d8685",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
 // Initialize Firebase
