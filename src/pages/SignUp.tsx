@@ -70,7 +70,7 @@ const Signup = () => {
                   [e.target.name]: e.target.value,
                 })
               }
-              className="w-[40%] px-2 py-1 text-sm text-dark/80 outline-none md:w-full md:py-2 md:px-4 md:text-lg"
+              className="w-[40%] px-2 py-1 text-sm text-dark/80 md:w-full outline-none md:py-2 md:px-4 md:text-lg"
             />
           ) : null}
           {!showPassword ? (
@@ -82,10 +82,10 @@ const Signup = () => {
               Get Started
             </SignUpButton>
           ) : null}
-        </form>
         {showPassword ? (
           <SignUpButton onClick={handleSignIn}>Sign Up</SignUpButton>
         ) : null}
+        </form>
         <p className="md:text-md text-sm text-white/50 lg:text-lg">
           Already have a account?{" "}
           <NavLink
